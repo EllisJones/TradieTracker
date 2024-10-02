@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <script
+      defer
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <title>TradeTracker</title>
+  </head>
+  <body>
+    <div class="gridContainer">
+      <div class="sideBar">
+        <h1><img src="map-svgrepo-com.svg" alt="" /> TradeTracker</h1>
+
+        <div id="jobListContainer"></div>
+      </div>
+      <div id="map"></div>
+      <div class="jobDetailsContainer">
+        <h2>
+          Job Details <button id="newJobBtn" class="button">New Job</button>
+        </h2>
+        <p id="jobDetailPlaceholder" class="center">
+          Either click an existing job to edit the details, or click New job to
+          make a new one.
+        </p>
+        <form id="newOrderForm" class="hidden">
+          <div class="orderFormGrid">
+            <div class="orderFormName">
+              <label for="orderFormName">Name:</label><br />
+              <input
+                type="text"
+                id="orderFormName"
+                name="Name"
+                placeholder="Insert Name Here"
+                required
+              />
+            </div>
+            <div class="orderFormPostcode">
+              <label for="orderFormPostcode">Postcode:</label><br />
+              <input
+                type="text"
+                id="orderFormPostcode"
+                name="Postcode"
+                placeholder="Postcode"
+                required
+              />
+            </div>
+            <div class="orderFormAddress">
+              <label for="orderFormAddress">Address:</label><br />
+              <input
+                type="text"
+                id="orderFormAddress"
+                name="Address"
+                placeholder="house number and street"
+                required
+              />
+            </div>
+            <div class="orderFormComments">
+              <label for="orderFormComments">Comments:</label> <br />
+              <textarea
+                id="orderFormComments"
+                placeholder="Enter job comments here"
+              ></textarea>
+            </div>
+            <div id="orderFormErrors"></div>
+            <input
+              type="submit"
+              id="orderFormSubmit"
+              class="button orderFormSubmit"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+  <script defer src="script.js"></script>
+</html>
