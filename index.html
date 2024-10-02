@@ -32,7 +32,7 @@
         </h2>
         <p id="jobDetailPlaceholder" class="center">
           Either click an existing job to edit the details, or click New job to
-          make a new one.
+          create a new one.
         </p>
         <form id="newOrderForm" class="hidden">
           <div class="orderFormGrid">
@@ -78,6 +78,54 @@
               type="submit"
               id="orderFormSubmit"
               class="button orderFormSubmit"
+            />
+          </div>
+        </form>
+        <form id="jobDetailForm" class="hidden">
+          <div class="orderFormGrid">
+            <div class="orderFormName">
+              <label for="jobDetailFormName">Name:</label><br />
+              <input
+                type="text"
+                id="jobDetailFormName"
+                name="Name"
+                placeholder="Insert Name Here"
+                required
+              />
+            </div>
+            <div class="orderFormPostcode">
+              <label for="jobDetailFormPostcode">Postcode:</label><br />
+              <input
+                type="text"
+                id="jobDetailFormPostcode"
+                name="Postcode"
+                placeholder="Postcode"
+                required
+              />
+            </div>
+            <div class="orderFormAddress">
+              <label for="jobDetailFormAddress">Address:</label><br />
+              <input
+                type="text"
+                id="jobDetailFormAddress"
+                name="Address"
+                placeholder="house number and street"
+                required
+              />
+            </div>
+            <div class="orderFormComments">
+              <label for="jobDetailFormComments">Comments:</label> <br />
+              <textarea
+                id="jobDetailFormComments"
+                placeholder="Enter job comments here"
+              ></textarea>
+            </div>
+            <div id="orderFormErrors"></div>
+            <input
+              type="submit"
+              id="jobDetailFormSubmit"
+              class="button orderFormSubmit"
+              placeholder="Update"
             />
           </div>
         </form>

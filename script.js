@@ -8,16 +8,21 @@ const orderFormAddress = document.getElementById("orderFormAddress");
 const orderFormPostcode = document.getElementById("orderFormPostcode");
 const orderFormComments = document.getElementById("orderFormComments");
 const orderFormErrors = document.getElementById("orderFormErrors");
-
+const jobListContainer = document.getElementById("jobListContainer");
+const jobDetailFormName = document.getElementById("jobDetailFormName");
+const jobDetailFormAddress = document.getElementById("jobDetailFormAddress");
+const jobDetailFormPostcode = document.getElementById("jobDetailFormPostcode");
+const jobDetailFormComments = document.getElementById("jobDetailFormComments");
+const jobDetailForm = document.getElementById("jobDetailForm");
 class Job {
-  #id;
+  id;
 
   constructor(name, address, postcode, comments, coords) {
     this.name = name;
     this.address = address;
     this.postcode = postcode;
     this.comments = comments;
-    this.#id = app.globalId++;
+    this.id = app.globalId++;
     this.coords = coords;
     app._plotMarker(this.coords);
     app.jobs.push(this);
@@ -31,13 +36,13 @@ class Job {
   }
   _renderJob() {
     const elements = {
-      "ID:": this.#id,
+      id: this.id,
       "Name:": this.name,
       "Address:": this.address,
       "Postcode:": this.postcode,
     };
     const jobContainer = document.createElement("div");
-    jobContainer.id = this.#id;
+    jobContainer.id = this.id;
     const nameContainer = document.createElement("div");
     const valueContainer = document.createElement("div");
     jobContainer.classList.add("jobElement");
@@ -62,7 +67,7 @@ class Job {
     }
     jobContainer.appendChild(nameContainer);
     jobContainer.appendChild(valueContainer);
-    document.getElementById("jobListContainer").appendChild(jobContainer);
+    jobListContainer.appendChild(jobContainer);
   }
 }
 
@@ -76,6 +81,7 @@ class App {
     this._getLocation();
     newJobBtn.addEventListener("click", this._toggleNewOrderForm.bind(this));
     submitNewJobBtn.addEventListener("click", this._newJob.bind(this));
+    jobListContainer.addEventListener("click", this._selectJob.bind(this));
   }
 
   _getLocation() {
@@ -158,11 +164,20 @@ class App {
     newJobBtn.classList.toggle("hidden");
     jobDetailPlaceholder.classList.toggle("hidden");
   }
-  _selectJob() {
-    //use event listener to call this function either by clicking map marker, or the specific job in the job list
-    //.closest() to find the order ID
-    //set the value to be the same as the object values
-    //toggle appearance of the editting field
+  _selectJob(e) {
+    //use event listener to call this function either by clicking the specific job in the job list
+    let selectedJobID = e.target
+      .closest(".jobElement")
+      .querySelector(".value-container")
+      .querySelector("#id").textContent;
+    let selectedJob = this.jobs.find(({ id }) => id == selectedJobID);
+    jobDetailFormName.value = selectedJob.name;
+    jobDetailFormAddress.value = selectedJob.address;
+    jobDetailFormPostcode.value = selectedJob.postcode;
+    jobDetailFormComments.value = selectedJob.comments;
+    jobDetailForm.classList.toggle("hidden");
+    newJobBtn.classList.toggle("hidden");
+    jobDetailPlaceholder.classList.toggle("hidden");
     //-> then leaves in a position to press save which calls job._updateInfo()
   }
 }
