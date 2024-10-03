@@ -14,6 +14,8 @@ const jobDetailFormAddress = document.getElementById("jobDetailFormAddress");
 const jobDetailFormPostcode = document.getElementById("jobDetailFormPostcode");
 const jobDetailFormComments = document.getElementById("jobDetailFormComments");
 const jobDetailForm = document.getElementById("jobDetailForm");
+const jobDetailFormUpdate = document.getElementById("jobDetailFormUpdate");
+const jobId = document.getElementById("jobId");
 class Job {
   id;
 
@@ -28,18 +30,12 @@ class Job {
     app.jobs.push(this);
     this._renderJob();
   }
-  _updateInfo() {
-    //get the info from the input fields
-    //update the object in app.jobs[]
-    //document.getElementById(`${id}`)
-    //update element text content based off object
-  }
   _renderJob() {
     const elements = {
       id: this.id,
-      "Name:": this.name,
-      "Address:": this.address,
-      "Postcode:": this.postcode,
+      name: this.name,
+      address: this.address,
+      postcode: this.postcode,
     };
     const jobContainer = document.createElement("div");
     jobContainer.id = this.id;
@@ -82,6 +78,7 @@ class App {
     newJobBtn.addEventListener("click", this._toggleNewOrderForm.bind(this));
     submitNewJobBtn.addEventListener("click", this._newJob.bind(this));
     jobListContainer.addEventListener("click", this._selectJob.bind(this));
+    jobDetailFormUpdate.addEventListener("click", this._updateInfo.bind(this));
   }
 
   _getLocation() {
@@ -166,11 +163,14 @@ class App {
   }
   _selectJob(e) {
     //use event listener to call this function either by clicking the specific job in the job list
-    let selectedJobID = e.target
-      .closest(".jobElement")
-      .querySelector(".value-container")
-      .querySelector("#id").textContent;
-    let selectedJob = this.jobs.find(({ id }) => id == selectedJobID);
+    let selectedJobID = Number(
+      e.target
+        .closest(".jobElement")
+        .querySelector(".value-container")
+        .querySelector("#id").textContent
+    );
+    let selectedJob = this.jobs.find(({ id }) => id === selectedJobID);
+    jobId.textContent = selectedJobID;
     jobDetailFormName.value = selectedJob.name;
     jobDetailFormAddress.value = selectedJob.address;
     jobDetailFormPostcode.value = selectedJob.postcode;
@@ -178,7 +178,32 @@ class App {
     jobDetailForm.classList.toggle("hidden");
     newJobBtn.classList.toggle("hidden");
     jobDetailPlaceholder.classList.toggle("hidden");
-    //-> then leaves in a position to press save which calls job._updateInfo()
+    //-> then leaves in a position to press 'Update' which calls _updateInfo()
+  }
+  _updateInfo(event) {
+    event.preventDefault();
+    //update the object in app.jobs[]
+    let selectedJob = this.jobs.find(
+      ({ id }) => id === Number(jobId.textContent)
+    );
+    selectedJob.name = jobDetailFormName.value;
+    selectedJob.address = jobDetailFormAddress.value;
+    selectedJob.postcode = jobDetailFormPostcode.value;
+    selectedJob.comments = jobDetailFormComments.value;
+    //update element text content based off object
+    let jobListElement = document
+      .getElementById(`${selectedJob.id}`)
+      .querySelector(".value-container");
+    console.log(jobListElement);
+    jobListElement.querySelector("#name").textContent = jobDetailFormName.value;
+    jobListElement.querySelector("#postcode").textContent =
+      jobDetailFormPostcode.value;
+    jobListElement.querySelector("#address").textContent =
+      jobDetailFormAddress.value;
+    //toggles visibility of the job detail form.
+    jobDetailForm.classList.toggle("hidden");
+    newJobBtn.classList.toggle("hidden");
+    jobDetailPlaceholder.classList.toggle("hidden");
   }
 }
 const app = new App();

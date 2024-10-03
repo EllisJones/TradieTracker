@@ -90,9 +90,13 @@ input {
   grid-row: 2;
 }
 /* Job detail styling (bottom right box)*/
+.selectedJob {
+  font-weight: bold;
+}
 .orderFormGrid {
   display: grid;
   grid-template-columns: auto auto;
+  margin-top: 15px;
   width: 100%;
   gap: 20px;
 }
