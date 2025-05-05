@@ -26,7 +26,7 @@ class Job {
     this.comments = comments;
     this.id = app.globalId++;
     this.coords = coords;
-    app._plotMarker(this.coords);
+    app._plotMarker(this.id, this.coords);
     app.jobs.push(this);
     this._renderJob();
   }
@@ -71,6 +71,7 @@ class App {
   #map;
   globalId = 1;
   jobs = [];
+  markers = {};
   errorMessage = [];
   constructor() {
     //app initialisation
@@ -120,10 +121,11 @@ class App {
       })
       .catch((error) => console.error(error));
   }
-  _plotMarker(coords) {
+  _plotMarker(id, coords) {
     // plots a marker on the map based on the coords given
     var marker = L.marker(coords).addTo(this.#map);
     this.#map.setView(coords, 13);
+    this.markers[`marker${id}`] = marker;
   }
   async _newJob(event) {
     //prevents web page from refreshing once form is submitted
@@ -180,7 +182,7 @@ class App {
     jobDetailPlaceholder.classList.toggle("hidden");
     //-> then leaves in a position to press 'Update' which calls _updateInfo()
   }
-  _updateInfo(event) {
+  async _updateInfo(event) {
     event.preventDefault();
     //update the object in app.jobs[]
     let selectedJob = this.jobs.find(
@@ -200,8 +202,17 @@ class App {
       jobDetailFormPostcode.value;
     jobListElement.querySelector("#address").textContent =
       jobDetailFormAddress.value;
-    //toggles visibility of the job detail form.
-    jobDetailForm.classList.toggle("hidden");
+    // uses the postcode to generate a new lat + lang to update the marker position on the map.
+    let newCoords = await this._calcCoords(selectedJob.postcode);
+    console.log(newCoords);
+    if (app.markers[`marker${selectedJob.id}`]) {
+      app.markers[`marker${selectedJob.id}`].setLatLng(newCoords); // Update marker position
+      app.#map.panTo(newCoords); // Pan the map to the new position
+    } else {
+      alert("Marker with ID not found.");
+    }
+    jobDetailForm.classList //toggles visibility of the job detail form.
+      .toggle("hidden");
     newJobBtn.classList.toggle("hidden");
     jobDetailPlaceholder.classList.toggle("hidden");
   }
