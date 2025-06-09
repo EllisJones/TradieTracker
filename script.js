@@ -172,6 +172,7 @@ class App {
         .querySelector("#id").textContent
     );
     let selectedJob = this.jobs.find(({ id }) => id === selectedJobID);
+    this.#map.setView(selectedJob.coords, 13);
     jobId.textContent = selectedJobID;
     jobDetailFormName.value = selectedJob.name;
     jobDetailFormAddress.value = selectedJob.address;
